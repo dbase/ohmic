@@ -169,11 +169,9 @@ ohm_t *ohm_resize(ohm_t *old_hm, int size) {
 	if(!old_hm) return NULL;
 
 	ohm_t *new_hm = ohm_init(size, old_hm->hash);
-	void *tmp;
-
 	ohm_iter i = ohm_iter_init(old_hm);
 	for(; i.key != NULL; ohm_iter_inc(&i))
-		tmp = ohm_insert(new_hm, i.key, i.keylen, i.value, i.valuelen);
+		ohm_insert(new_hm, i.key, i.keylen, i.value, i.valuelen);
 
 	ohm_free(old_hm);
 	return new_hm;
@@ -238,9 +236,9 @@ int ohm_hash(void *key, int keylen, int size) {
 	if(!key) return -1;
 
 	unsigned int hash = 5381;
-	int c;
+	char c, *k = (char *) key;
 
-	while((c = *(char *) key++))
+	while((c = *k++))
 		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
 
 	return hash % size; /* Probably a more Poisson range method exists, oh well. */

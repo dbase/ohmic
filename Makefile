@@ -1,7 +1,7 @@
 CC	?= gcc
 SRC	= ohmic.c test.c
 DEPS	= ohmic.h
-CLFAGS	= -Wall -pedantic -ansi -g -O0
+CFLAGS	= -Wall -pedantic -std=c99 -g -O0
 LFLAGS	=
 
 test: $(SRC) $(DEPS)
