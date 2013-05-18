@@ -32,6 +32,14 @@ int main(void) {
 	printf("%s -> %d\n", "fircats", *(int *) ohm_search(table, "fircats", strlen("fircats") + 1));
 	printf("%s -> %d\n", "man", *(int *) ohm_search(table, "man", strlen("man") + 1));
 
+	printf("resizing hashmap\n");
+	table = ohm_resize(table, 1);
+
+	printf("retreiving values from hashmap size %d\n", table->size);
+	printf("%s -> %d\n", "lolcats", *(int *) ohm_search(table, "lolcats", strlen("lolcats") + 1));
+	printf("%s -> %d\n", "fircats", *(int *) ohm_search(table, "fircats", strlen("fircats") + 1));
+	printf("%s -> %d\n", "man", *(int *) ohm_search(table, "man", strlen("man") + 1));
+
 	printf("freeing hashmap\n");
 	ohm_free(table);
 	return 0;
