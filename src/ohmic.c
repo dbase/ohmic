@@ -126,8 +126,10 @@ void *ohm_insert(ohm_t *hashmap, void *key, int keylen, void *value, int valuele
 						return NULL;
 					current_node->valuelen = valuelen;
 				}
+				/* copy over the new value and update item count */
 				memcpy(current_node->value, value, valuelen);
 				hashmap->count++;
+
 				return current_node->value;
 			}
 		parent_node = current_node;
@@ -173,22 +175,28 @@ int ohm_remove(ohm_t *hashmap, void *key, int keylen) {
 	while(current_node) {
 		if(current_node->keylen == keylen)
 			if(!memcmp(current_node->key, key, keylen)) {
-				/* key found */
+				/* key found, free values */
 				free(current_node->value);
 				free(current_node->key);
 
+				/* link up chains orphaned by deletion of current node */
 				if(parent_node)
 					parent_node->next = current_node->next;
 				else
 					hashmap->table[index] = current_node->next;
 
+				/* free memory and update item count */
 				free(current_node);
 				hashmap->count--;
+
+				/* item found and deleted, return success*/
 				return 0;
 			}
 		parent_node = current_node;
 		current_node = current_node->next;
 	}
+
+	/* item not found, return error */
 	return 1;
 } /* ohm_remove() */
 
@@ -233,8 +241,12 @@ void ohm_iter_inc(ohm_iter *i) {
 	if(i->internal.node && i->internal.node->next) {
 		/* get next node down */
 		i->internal.node = i->internal.node->next;
+
+		/* update internal key information */
 		i->key = i->internal.node->key;
 		i->keylen = i->internal.node->keylen;
+
+		/* update internal value information */
 		i->value = i->internal.node->value;
 		i->valuelen = i->internal.node->valuelen;
 		return;
@@ -251,6 +263,7 @@ void ohm_iter_inc(ohm_iter *i) {
 		i->internal.node = NULL;
 		i->internal.index = hashmap->size;
 
+		/* set everything to NULL */
 		i->key = NULL;
 		i->keylen = 0;
 		i->value = NULL;
@@ -262,11 +275,11 @@ void ohm_iter_inc(ohm_iter *i) {
 	i->internal.node = hashmap->table[index];
 	i->internal.index = index;
 
-	/* update key information */
+	/* update internal key information */
 	i->key = i->internal.node->key;
 	i->keylen = i->internal.node->keylen;
 
-	/* update value information */
+	/* update internal value information */
 	i->value = i->internal.node->value;
 	i->valuelen = i->internal.node->valuelen;
 } /* ohm_iter_inc() */
