@@ -11,5 +11,5 @@ ERRORS	= -Wall -Wextra -Werror -pedantic -std=c99
 CFLAGS	= $(ERRORS) -g -O0 -I$(SRC_DIR)/
 LFLAGS	=
 
-test: $(SRC) $(DEPS)
+test: $(SRC) $(DEPS) $(TEST)
 	$(CC) $(CFLAGS) $(SRC) $(TEST) $(LFLAGS) -o ohm-test
