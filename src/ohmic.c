@@ -39,7 +39,7 @@ struct ohm_t {
 	ohm_node **table;
 	int count;
 	int size;
-	int (*hash)(void *, size_t, int);
+	int (*hash)(void *, size_t);
 };
 
 struct ohm_iter {
@@ -57,7 +57,7 @@ struct ohm_iter {
 	} internal;
 };
 
-ohm_t *ohm_init(int size, int (*hash_func)(void *, size_t, int)) {
+ohm_t *ohm_init(int size, int (*hash_func)(void *, size_t)) {
 	if(size < 1)
 		return NULL;
 
@@ -118,7 +118,7 @@ void *ohm_search(ohm_t *hashmap, void *key, size_t keylen) {
 		return NULL;
 
 	/* get hash index */
-	int index = hashmap->hash(key, keylen, hashmap->size);
+	int index = hashmap->hash(key, keylen) % hashmap->size;
 	if(index < 0 || !hashmap->table[index])
 		return NULL;
 
@@ -145,7 +145,7 @@ void *ohm_insert(ohm_t *hashmap, void *key, size_t keylen, void *value, size_t v
 		return NULL;
 
 	/* get hash index */
-	int index = hashmap->hash(key, keylen, hashmap->size);
+	int index = hashmap->hash(key, keylen) % hashmap->size;
 	if(index < 0)
 		return NULL;
 
@@ -208,7 +208,7 @@ int ohm_remove(ohm_t *hashmap, void *key, size_t keylen) {
 		return 1;
 
 	/* get hash index */
-	int index = hashmap->hash(key, keylen, hashmap->size);
+	int index = hashmap->hash(key, keylen) % hashmap->size;
 	if(index < 0)
 		return 1;
 
@@ -398,17 +398,17 @@ void ohm_cpy(ohm_t *to_hm, ohm_t *from_hm) {
 } /* ohm_cpy() */
 
 /* the djb2 hashing algorithm by Dan Bernstein */
-int ohm_hash(void *key, size_t keylen, int size) {
-	if(!key || keylen < 1 || size < 1)
+int ohm_hash(void *key, size_t keylen) {
+	if(!key || keylen < 1)
 		return -1;
 
-	unsigned int hash = 5381;
+	int hash = 5381;
 	char c, *k = (char *) key;
 
 	while((c = *k++))
 		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
 
-	return hash % size; /* a more poisson distribution method for max range probably exists, oh well. */
+	return abs(hash); /* a more poisson distribution method for max range probably exists, oh well. */
 } /* ohm_hash() */
 
 int ohm_count(ohm_t *hm) {
