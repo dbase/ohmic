@@ -10,7 +10,7 @@
 
 int main(void) {
 	printf("initialising hashmap\n");
-	ohm_t *table = ohm_init(2, NULL);
+	struct ohm_t *table = ohm_init(2, NULL);
 
 	int a = 1, b = 7, c = 100;
 
@@ -40,7 +40,7 @@ int main(void) {
 	printf("%s -> %d\n", "fircats", *(int *) ohm_search(table, "fircats", strlen("fircats") + 1));
 	printf("%s -> %d\n", "man", *(int *) ohm_search(table, "man", strlen("man") + 1));
 
-	ohm_t *new = ohm_init(2, NULL);
+	struct ohm_t *new = ohm_init(2, NULL);
 
 	a = 3;
 	b = 4;
@@ -61,7 +61,7 @@ int main(void) {
 	printf("%s -> %d\n", "dsd", *(int *) ohm_search(table, "dsd", strlen("dsd") + 1));
 
 	printf("duplicating merged hashmap\n");
-	ohm_t *dup = ohm_dup(table);
+	struct ohm_t *dup = ohm_dup(table);
 
 	printf("retreiving values from hashmap size %d\n", ohm_size(dup));
 	printf("%s -> %d\n", "lolcats", *(int *) ohm_search(dup, "lolcats", strlen("lolcats") + 1));
@@ -71,7 +71,7 @@ int main(void) {
 	printf("%s -> %d\n", "dsd", *(int *) ohm_search(dup, "dsd", strlen("dsd") + 1));
 
 	printf("making temporary hashmap\n");
-	ohm_t *to = ohm_init(2, NULL);
+	struct ohm_t *to = ohm_init(2, NULL);
 	ohm_insert(to, "dsd", strlen("dsd") + 1, &a, sizeof(3));
 	ohm_insert(to, "fircs", strlen("fircs") + 1, &b, sizeof(4));
 	ohm_insert(to, "man", strlen("man") + 1, &c, sizeof(2));
