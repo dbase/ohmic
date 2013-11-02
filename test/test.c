@@ -19,7 +19,7 @@ int main(void) {
 	ohm_insert(table, "fircats", strlen("fircats") + 1, &b, sizeof(7));
 	ohm_insert(table, "man", strlen("man") + 1, &c, sizeof(100));
 
-	printf("retreiving values from hashmap size %d\n", ohm_size(table));
+	printf("retreiving values from hashmap size %d\n", table->size);
 	printf("%s -> %d\n", "lolcats", *(int *) ohm_search(table, "lolcats", strlen("lolcats") + 1));
 	printf("%s -> %d\n", "fircats", *(int *) ohm_search(table, "fircats", strlen("fircats") + 1));
 	printf("%s -> %d\n", "man", *(int *) ohm_search(table, "man", strlen("man") + 1));
@@ -27,7 +27,7 @@ int main(void) {
 	printf("resizing hashmap\n");
 	table = ohm_resize(table, 50);
 
-	printf("retreiving values from hashmap size %d\n", ohm_size(table));
+	printf("retreiving values from hashmap size %d\n", table->size);
 	printf("%s -> %d\n", "lolcats", *(int *) ohm_search(table, "lolcats", strlen("lolcats") + 1));
 	printf("%s -> %d\n", "fircats", *(int *) ohm_search(table, "fircats", strlen("fircats") + 1));
 	printf("%s -> %d\n", "man", *(int *) ohm_search(table, "man", strlen("man") + 1));
@@ -35,7 +35,7 @@ int main(void) {
 	printf("resizing hashmap\n");
 	table = ohm_resize(table, 1);
 
-	printf("retreiving values from hashmap size %d\n", ohm_size(table));
+	printf("retreiving values from hashmap size %d\n", table->size);
 	printf("%s -> %d\n", "lolcats", *(int *) ohm_search(table, "lolcats", strlen("lolcats") + 1));
 	printf("%s -> %d\n", "fircats", *(int *) ohm_search(table, "fircats", strlen("fircats") + 1));
 	printf("%s -> %d\n", "man", *(int *) ohm_search(table, "man", strlen("man") + 1));
@@ -53,7 +53,7 @@ int main(void) {
 	printf("merging new hashmap with old\n");
 	ohm_merge(table, new);
 
-	printf("retreiving values from hashmap size %d\n", ohm_size(table));
+	printf("retreiving values from hashmap size %d\n", table->size);
 	printf("%s -> %d\n", "lolcats", *(int *) ohm_search(table, "lolcats", strlen("lolcats") + 1));
 	printf("%s -> %d\n", "fircats", *(int *) ohm_search(table, "fircats", strlen("fircats") + 1));
 	printf("%s -> %d\n", "man", *(int *) ohm_search(table, "man", strlen("man") + 1));
@@ -63,7 +63,7 @@ int main(void) {
 	printf("duplicating merged hashmap\n");
 	struct ohm_t *dup = ohm_dup(table);
 
-	printf("retreiving values from hashmap size %d\n", ohm_size(dup));
+	printf("retreiving values from hashmap size %d\n", dup->size);
 	printf("%s -> %d\n", "lolcats", *(int *) ohm_search(dup, "lolcats", strlen("lolcats") + 1));
 	printf("%s -> %d\n", "fircats", *(int *) ohm_search(dup, "fircats", strlen("fircats") + 1));
 	printf("%s -> %d\n", "man", *(int *) ohm_search(dup, "man", strlen("man") + 1));
@@ -76,7 +76,7 @@ int main(void) {
 	ohm_insert(to, "fircs", strlen("fircs") + 1, &b, sizeof(4));
 	ohm_insert(to, "man", strlen("man") + 1, &c, sizeof(2));
 
-	printf("retreiving values from hashmap size %d\n", ohm_size(to));
+	printf("retreiving values from hashmap size %d\n", to->size);
 	printf("%s -> %d\n", "man", *(int *) ohm_search(to, "man", strlen("man") + 1));
 	printf("%s -> %d\n", "fircs", *(int *) ohm_search(to, "fircs", strlen("fircs") + 1));
 	printf("%s -> %d\n", "dsd", *(int *) ohm_search(to, "dsd", strlen("dsd") + 1));
@@ -84,7 +84,7 @@ int main(void) {
 	printf("copying to temporary hashmap\n");
 	ohm_cpy(to, table);
 
-	printf("retreiving values from hashmap size %d\n", ohm_size(to));
+	printf("retreiving values from hashmap size %d\n", to->size);
 	printf("%s -> %d\n", "lolcats", *(int *) ohm_search(to, "lolcats", strlen("lolcats") + 1));
 	printf("%s -> %d\n", "fircats", *(int *) ohm_search(to, "fircats", strlen("fircats") + 1));
 	printf("%s -> %d\n", "man", *(int *) ohm_search(to, "man", strlen("man") + 1));
